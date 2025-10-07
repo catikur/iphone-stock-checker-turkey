@@ -4,7 +4,9 @@ A web application to check iPhone 17 Pro / Pro Max Cosmic Orange stock availabil
 
 ## Live Demo
 
-**Application URL:** https://lnh8imcw1qqm.manus.space
+**Application URL:** https://w5hni7cp1m5w.manus.space
+
+> **Note:** This is the latest version with all bug fixes. The application is deployed and ready to use!
 
 ## Features
 
@@ -256,6 +258,10 @@ This application does not collect or store any personal information. It only acc
 ## License
 
 This project is for educational and personal use only.
+
+## Repository
+
+**GitHub:** https://github.com/catikur/iphone-stock-checker-turkey
 
 ## Author
 
