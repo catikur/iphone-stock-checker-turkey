@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Stok Kontrol - Apple Türkiye</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="switchLang('tr')">TR</button>
+                <button class="lang-btn" onclick="switchLang('en')">EN</button>
+            </div>
+            <h1 data-tr="iPhone Stok Kontrol - Apple Türkiye" data-en="iPhone Stock Checker - Apple Turkey">iPhone Stok Kontrol - Apple Türkiye</h1>
+            <p data-tr="iPhone 17 Pro / Pro Max Kozmik Turuncu için İstanbul mağazalarında stok durumunu kontrol edin" data-en="Check stock availability for iPhone 17 Pro / Pro Max Cosmic Orange at Istanbul stores">iPhone 17 Pro / Pro Max Kozmik Turuncu için İstanbul mağazalarında stok durumunu kontrol edin</p>
+        </div>
+
+        <div class="card">
+            <h2>
+                <span>🔍</span>
+                <span data-tr="Manuel Kontrol" data-en="Manual Check">Manuel Kontrol</span>
+            </h2>
+            <div class="controls">
+                <button class="btn btn-primary" onclick="checkStock()" id="checkBtn">
+                    <span data-tr="Şimdi Kontrol Et" data-en="Check Now">Şimdi Kontrol Et</span>
+                </button>
+            </div>
+            <div id="manualResults"></div>
+        </div>
+
+        <div class="card">
+            <h2>
+                <span>⏰</span>
+                <span data-tr="Otomatik Kontrol" data-en="Automatic Check">Otomatik Kontrol</span>
+            </h2>
+            <div class="controls">
+                <div class="input-group">
+                    <label data-tr="Kontrol Aralığı (dakika):" data-en="Check Interval (minutes):">Kontrol Aralığı (dakika):</label>
+                    <input type="number" id="intervalInput" value="30" min="5" max="1440">
+                </div>
+                <button class="btn btn-success" onclick="startScheduler()" id="startBtn">
+                    <span data-tr="Başlat" data-en="Start">Başlat</span>
+                </button>
+                <button class="btn btn-danger" onclick="stopScheduler()" id="stopBtn" disabled>
+                    <span data-tr="Durdur" data-en="Stop">Durdur</span>
+                </button>
+            </div>
+            <div id="schedulerStatus"></div>
+            <div id="schedulerResults"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
