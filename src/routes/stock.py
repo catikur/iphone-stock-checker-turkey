@@ -65,14 +65,14 @@ STORES = {
     }
 }
 
-def check_apple_store_stock(part_number, store_id):
-    """Check stock availability at Apple Store"""
+def check_apple_store_stock(part_number, store_postal_code):
+    """Check stock availability at Apple Store using location-based API"""
     try:
         url = f"https://www.apple.com/tr/shop/retail/pickup-message"
         params = {
             'pl': 'true',
             'parts.0': part_number,
-            'store': store_id
+            'location': store_postal_code
         }
         
         headers = {
@@ -88,19 +88,28 @@ def check_apple_store_stock(part_number, store_id):
             body = data.get('body', {})
             stores = body.get('stores', [])
             
-            for store in stores:
-                if store.get('storeNumber') == store_id:
-                    parts_availability = store.get('partsAvailability', {})
-                    part_info = parts_availability.get(part_number, {})
-                    
-                    return {
-                        'available': part_info.get('pickupDisplay') == 'available',
-                        'pickup_display': part_info.get('pickupDisplay', 'unavailable'),
-                        'store_pickup_label': part_info.get('storePickupLabel', 'Stokta yok'),
-                        'store_name': store.get('storeName', ''),
-                        'store_number': store.get('storeNumber', ''),
-                        'checked_at': datetime.now().isoformat()
-                    }
+            # API returns all nearby stores, we need to find ours
+            if stores and len(stores) > 0:
+                # Return the first store (closest one)
+                store = stores[0]
+                parts_availability = store.get('partsAvailability', {})
+                part_info = parts_availability.get(part_number, {})
+                
+                # Get the correct pickup display and label from messageTypes
+                message_types = part_info.get('messageTypes', {})
+                regular_message = message_types.get('regular', {})
+                
+                pickup_display = part_info.get('pickupDisplay', 'unavailable')
+                store_pickup_quote = regular_message.get('storePickupQuote', 'Stok bilgisi alınamadı')
+                
+                return {
+                    'available': pickup_display == 'available',
+                    'pickup_display': pickup_display,
+                    'store_pickup_label': store_pickup_quote,
+                    'store_name': store.get('storeName', ''),
+                    'store_number': store.get('storeNumber', ''),
+                    'checked_at': datetime.now().isoformat()
+                }
         
         return {
             'available': False,
@@ -113,6 +122,7 @@ def check_apple_store_stock(part_number, store_id):
         return {
             'available': False,
             'error': str(e),
+            'store_pickup_label': f'Hata: {str(e)}',
             'checked_at': datetime.now().isoformat()
         }
 
@@ -140,7 +150,7 @@ def check_stock():
             
             stock_info = check_apple_store_stock(
                 product['part_number'],
-                store['store_id']
+                store['postal_code']
             )
             
             results.append({
